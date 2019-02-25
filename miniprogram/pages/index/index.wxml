@@ -1,0 +1,2 @@
+<view>我是首页</view>
+<navigator url="/pages/tomorrow/tomorrow">跳转到添加明日事项页</navigator>
