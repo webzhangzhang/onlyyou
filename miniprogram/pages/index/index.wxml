@@ -1,2 +1,22 @@
-<view>我是首页</view>
-<navigator url="/pages/tomorrow/tomorrow">跳转到添加明日事项页</navigator>
+<view class='body'>
+  <view class="tomorrow">
+    <navigator url="/pages/tomorrow/tomorrow">添加明日事项</navigator>
+  </view>
+  <!--今日-->
+  <view class='card'>
+    <view class='card-header'>
+      <view class='today'>今日事项</view>
+      <text class='timer'>11-25-10</text>
+    </view>
+    <view class='any'>1111</view>
+    <view class='any'>1111</view>
+  </view>
+  <!--已完成-->
+  <view class='card'>
+    <view class='card-header'>
+      <text class='timer'>11-25-09</text>
+    </view>
+    <view class='any'>222</view>
+    <view class='any'>222</view>
+  </view>
+</view>

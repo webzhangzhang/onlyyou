@@ -1,1 +1,22 @@
 /* pages/tomorrow/tomorrow.wxss */
+.body{margin:0;padding: 10rpx;}
+input{background-color:#ddd;margin-top: 20rpx;padding: 15rpx;}
+.card{margin-top: 10rpx;padding: 20rpx;}
+.card-header{height:100rpx;
+display:flex;
+line-height:100rpx;
+border-bottom:1rpx dashed #ccc;
+}
+.today{width:200rpx;text-align: center;}
+.timer{margin-left: 295rpx;}
+.addthing{margin-top:20rpx;
+background-color:#237ed8;
+color:#fff;
+border-radius:10rpx}
+.imsure{background-color:#237ed8;
+position:relative;
+top:700rpx;
+
+text-align:center;
+color:#fff;
+border-radius:10rpx;}

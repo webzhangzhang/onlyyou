@@ -1,2 +1,22 @@
-<!--pages/tomorrow/tomorrow.wxml-->
-<text>请添加明日事项</text>
+<view class='body'>
+  <view class='card'>
+    <view class='card-header'>
+      <view class='today'>明日计划</view>
+      <text class='timer'>{{time}}</text>
+    </view>
+    <view class='anything'>
+      <input placeholder='|事件1' bindblur='huoqu'></input>
+      <input placeholder='|事件2' bindblur='huoqu'></input>
+      <input placeholder='|事件3' bindblur='huoqu'></input>
+      <input placeholder='|事件4' bindblur='huoqu' wx:if='{{isshow>3}}'></input>
+      <input placeholder='|事件5' bindblur='huoqu' wx:if='{{isshow>4}}'></input>
+      <input placeholder='|事件6' bindblur='huoqu' wx:if='{{isshow>5}}'></input>
+      <input placeholder='|事件7' bindblur='huoqu' wx:if='{{isshow>6}}'></input>
+      <input placeholder='|事件8' bindblur='huoqu' wx:if='{{isshow>7}}'></input>
+      <input placeholder='|事件9' bindblur='huoqu' wx:if='{{isshow>8}}'></input>
+      <rich-text nodes="{{nodes}}"></rich-text>
+    </view>
+    <button class='addthing' bindtap='tianjia'>添加计划</button>
+  </view>
+  <button class='imsure' bindtap='tijiao'>确定</button>
+</view>
