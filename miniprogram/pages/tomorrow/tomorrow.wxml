@@ -2,7 +2,7 @@
   <view class='card'>
     <view class='card-header'>
       <view class='today'>明日计划</view>
-      <text class='timer'>{{time}}</text>
+      <text class='timer'>{{tomorrowtime}}</text>
     </view>
     <view class='anything'>
       <input placeholder='|事件1' bindblur='huoqu'></input>

@@ -14,9 +14,6 @@ background-color:#237ed8;
 color:#fff;
 border-radius:10rpx}
 .imsure{background-color:#237ed8;
-position:relative;
-top:700rpx;
-
 text-align:center;
 color:#fff;
 border-radius:10rpx;}

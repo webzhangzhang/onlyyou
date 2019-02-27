@@ -1,22 +1,28 @@
 <view class='body'>
-  <view class="tomorrow">
+  <view class="tomorrowno"  bindtap='changecount' wx:if='{{count==0}}'>
     <navigator url="/pages/tomorrow/tomorrow">添加明日事项</navigator>
+  </view>
+  <view class="tomorrowok" wx:if='{{count!=0}}'>
+    <navigator url="/pages/xiugai/xiugai">明日事项已添加</navigator>
   </view>
   <!--今日-->
   <view class='card'>
     <view class='card-header'>
       <view class='today'>今日事项</view>
-      <text class='timer'>11-25-10</text>
+      <text class='timer'>{{todaytime}}</text>
     </view>
-    <view class='any'>1111</view>
-    <view class='any'>1111</view>
+    <view wx:for='{{todayshowlist}}'>
+      <view class="{{isclick?'anyclick':'anynormal'}}" data-index='{{index}}' wx:key='{{isclick}}' bindtap='clickme'>{{item}}</view>
+    </view>
   </view>
   <!--已完成-->
   <view class='card'>
     <view class='card-header'>
-      <text class='timer'>11-25-09</text>
+    <view class='today'>明日事项</view>
+      <text class='timer'>{{tomorrowtime}}</text>
     </view>
-    <view class='any'>222</view>
-    <view class='any'>222</view>
+    <view wx:for='{{tomorrowshowlist}}'>
+      <view class='any'>{{item}}</view>
+    </view>
   </view>
 </view>

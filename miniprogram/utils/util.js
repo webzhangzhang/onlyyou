@@ -13,12 +13,12 @@ const formatTime = date => {
 const tomoTime = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
-  const day = date.getDate()
+  const day = date.getDate() + 1
   const hour = date.getHours()
   const minute = date.getMinutes()
   const second = date.getSeconds()
 
-  return [year, month, day+1].map(formatNumber).join('-')
+  return [year, month, day].map(formatNumber).join('-')
 }
 
 const formatNumber = n => {

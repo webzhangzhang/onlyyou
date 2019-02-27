@@ -1,0 +1,12 @@
+<view class='body'>
+  <view class='card'>
+    <view class='card-header'>
+      <view class='today'>修改明日计划</view>
+      <text class='timer'>{{tomorrowtime}}</text>
+    </view>
+    <view class='anything' wx:for='{{tomorrowshowlist}}'>
+      <input value='{{item}}' name='jihua' bindblur='huoqu'></input>
+    </view>
+  </view>
+  <button class='imsure' bindtap='handle'>确定</button>
+</view>

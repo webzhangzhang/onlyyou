@@ -1,37 +1,81 @@
 //index.js
 const app = getApp()
-
+var util = require('../../utils/util.js')
 Page({
   data: {
     avatarUrl: './user-unlogin.png',
     userInfo: {},
     logged: false,
     takeSession: false,
-    requestResult: ''
+    requestResult: '',
+    todaytime:'',
+    tomorrowtime:'',
+    count:0,
+    todayshowlist:[],
+    tomorrowshowlist:[],
+    index:'',
+    isclick:''
+  },
+  changecount:function(){
+    this.setData({
+      count:false
+    })
+  },
+  clickme:function(e){
+    console.log(e.target.dataset.index)
+    this.setData({
+      index: e.target.dataset.index
+    })
   },
 
   onLoad: function() {
-    if (!wx.cloud) {
-      wx.redirectTo({
-        url: '../chooseLib/chooseLib',
-      })
-      return
-    }
-
-    // 获取用户信息
-    wx.getSetting({
+    var TIME = util.formatTime(new Date())
+    this.setData({
+      todaytime: TIME,
+    })
+    var tmtime = util.tomoTime(new Date())
+    this.setData({
+      tomorrowtime:tmtime
+    })
+    //获取今天事件
+    const db = wx.cloud.database()
+    const that=this
+    //查询当前用户所有的 counters
+    db.collection('counters').where({
+      _openid: this.data.openid,
+      time: this.data.todaytime
+    }).get({
       success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              this.setData({
-                avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo
-              })
-            }
-          })
-        }
+        console.log(res.data[0].list);
+        that.setData({
+          todayshowlist:res.data[0].list
+        })
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        console.error('[数据库] [查询记录] 失败：', err)
+      }
+    })
+      //获取明天事件
+    db.collection('counters').where({
+      _openid: this.data.openid,
+      time: this.data.tomorrowtime
+    }).get({
+      success: res => {
+        that.setData({
+          tomorrowshowlist: res.data[0].list,
+          count:res.data[0].list.length
+        })
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        console.error('[数据库] [查询记录] 失败：', err)
       }
     })
   },

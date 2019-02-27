@@ -1,6 +1,17 @@
 .body{margin:0;padding:20rpx;}
 page{background-color:#e7e7eb;}
-.tomorrow{width:100%;
+.tomorrowno{width:100%;
+height:100rpx;
+text-align:center;
+font-size:35rpx;
+line-height:100rpx;
+background-color:#237ed8;
+color:#fff;
+border-radius:20rpx;
+font-family:simhei;
+margin-top:10rpx;
+}
+.tomorrowok{width:100%;
 height:100rpx;
 text-align:center;
 font-size:35rpx;
@@ -18,5 +29,6 @@ line-height:100rpx;
 border-bottom:1rpx dashed #ccc;
 }
 .today{width:200rpx;text-align: center;}
-.timer{margin-left: 295rpx;}
-.any{padding:10rpx}
+.timer{margin-left: 250rpx;}
+.anynormal{padding:10rpx;text-decoration:none;}
+.anyclick{padding:10rpx;text-decoration:line-through;}
