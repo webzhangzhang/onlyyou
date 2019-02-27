@@ -11,8 +11,10 @@
       <view class='today'>今日事项</view>
       <text class='timer'>{{todaytime}}</text>
     </view>
-    <view wx:for='{{todayshowlist}}'>
-      <view class="{{isclick?'anyclick':'anynormal'}}" data-index='{{index}}' wx:key='{{isclick}}' bindtap='clickme'>{{item}}</view>
+    <view wx:for='{{todayshowlist}}' wx:key='{{index}}'>
+      <view class="{{item.count==100?'anyclick':'anynormal'}}" data-index='{{index}}'  bindtap='clickme'>
+        {{item.message}}
+      </view>
     </view>
   </view>
   <!--已完成-->
@@ -21,8 +23,8 @@
     <view class='today'>明日事项</view>
       <text class='timer'>{{tomorrowtime}}</text>
     </view>
-    <view wx:for='{{tomorrowshowlist}}'>
-      <view class='any'>{{item}}</view>
+    <view wx:for='{{tomorrowshowlist}}' wx:key='{{index}}'>
+      <view class='any'>{{item.message}}</view>
     </view>
   </view>
 </view>

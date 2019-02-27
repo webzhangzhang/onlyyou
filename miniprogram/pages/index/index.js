@@ -12,20 +12,36 @@ Page({
     tomorrowtime:'',
     count:0,
     todayshowlist:[],
+    linshi:[],
     tomorrowshowlist:[],
-    index:'',
-    isclick:''
+    index:''
   },
   changecount:function(){
     this.setData({
       count:false
     })
   },
+  //点击划掉事件
   clickme:function(e){
-    console.log(e.target.dataset.index)
+    //获取下标
+    //console.log(e.target.dataset.index)
     this.setData({
       index: e.target.dataset.index
     })
+    //给linshilist赋值
+    //修改设定好的字段
+    if (this.data.todayshowlist[this.data.index].count==0){
+      this.data.linshi[this.data.index].count=100
+      this.setData({
+        todayshowlist:this.data.linshi
+      })
+    }else{
+      this.data.linshi[this.data.index].count = 0
+      this.setData({
+        todayshowlist: this.data.linshi
+      })
+    }
+
   },
 
   onLoad: function() {
@@ -46,9 +62,10 @@ Page({
       time: this.data.todaytime
     }).get({
       success: res => {
-        console.log(res.data[0].list);
+        //console.log(res.data[0].list);
         that.setData({
-          todayshowlist:res.data[0].list
+          todayshowlist:res.data[0].list,
+          linshi:res.data[0].list
         })
       },
       fail: err => {
@@ -69,6 +86,7 @@ Page({
           tomorrowshowlist: res.data[0].list,
           count:res.data[0].list.length
         })
+        console.log(this.data.tomorrowshowlist)
       },
       fail: err => {
         wx.showToast({

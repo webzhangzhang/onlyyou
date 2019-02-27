@@ -8,19 +8,49 @@ Page({
   data: {
     tomorrowtime:'',
     tomorrowshowlist:[],
-    newlist:[]
+    linshilist:[],//用来存储修改后的数据准备上传代替原有的数据
+    linshiarr:{count:0,message:''},
+    index:'',
+    newlist:[],
+    openid:'oAb7r4tb3B-ErO7e6gVX9Ejftgtk',
+    counterId:''
+  },
+  jiequ:function(e){
+    console.log(this.data.counterId);
+    //console.log(e.target.dataset.index)
+    //获取下标
+    this.setData({
+      index:e.target.dataset.index
+    })
+    //console.log(this.data.index)
+    //截取下标开始的一个数据
+    //console.log(this.data.tomorrowshowlist.slice(this.data.index,this.data.index+1));
   },
   //获取修改后的数据
   huoqu: function (e) {
-    this.data.newlist.push(e.detail.value)
-    console.log(this.data.newlist);
+    this.setData({
+      newlist:e.detail.value
+    })
+    this.data.linshiarr.message=e.detail.value
+    this.data.linshilist.splice(this.data.index,1,this.data.linshiarr)
+    console.log(this.data.linshilist)
   },
-  handle:function(){
-    console.log(this.data.tomorrowshowlist[0])
-    var a = this.data.tomorrowshowlist
-    var b=a.splice(1,1)
-    console.log(b);
-    console.log(this.data.tomorrowshowlist)
+  //上传用
+  handle:function(e){
+    console.log('上传')
+    const db = wx.cloud.database()
+    console.log(this.data.linshilist)
+    db.collection('counters').doc(this.data.counterId).update({
+      data: {
+        list: this.data.linshilist
+      },
+      success: res => {
+        console.log(this.data.linshilist)
+      }
+    })
+    wx.navigateTo({
+      url: '/pages/index/index',
+    })
   },
 
   /**
@@ -31,7 +61,6 @@ Page({
     this.setData({
       tomorrowtime: tmtime
     })
-    //获取今天事件
     const db = wx.cloud.database()
     const that = this
     //获取明天事件
@@ -41,7 +70,9 @@ Page({
     }).get({
       success: res => {
         that.setData({
-          tomorrowshowlist: res.data[0].list
+          tomorrowshowlist: res.data[0].list,
+          linshilist:res.data[0].list,
+          counterId:res.data[0]._id
         })
       },
       fail: err => {

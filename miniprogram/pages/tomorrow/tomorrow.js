@@ -24,8 +24,11 @@ Page({
 
   //获取input中的值放到tijiaolist中
   huoqu: function (e) {
-    this.data.tijiaolist.push(e.detail.value)
-    console.log(this.data.tijiaolist);
+    var linshi={count:-1,message:e.detail.value}
+    if(e.detail.value.length>0){
+      this.data.tijiaolist.push(linshi)
+      console.log(this.data.tijiaolist);
+    }
   },
 
   //提交整体

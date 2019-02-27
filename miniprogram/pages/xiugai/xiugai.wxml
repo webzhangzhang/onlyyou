@@ -5,7 +5,7 @@
       <text class='timer'>{{tomorrowtime}}</text>
     </view>
     <view class='anything' wx:for='{{tomorrowshowlist}}'>
-      <input value='{{item}}' name='jihua' bindblur='huoqu'></input>
+      <input value='{{item.message}}' name='jihua' data-index='{{index}}' bindblur='huoqu' bindfocus='jiequ'></input>
     </view>
   </view>
   <button class='imsure' bindtap='handle'>确定</button>
