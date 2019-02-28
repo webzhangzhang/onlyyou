@@ -1,5 +1,6 @@
 {
   "pages": [
+    
     "pages/index/index",
     "pages/tomorrow/tomorrow",
     "pages/xiugai/xiugai"

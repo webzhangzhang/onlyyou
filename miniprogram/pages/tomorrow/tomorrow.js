@@ -7,6 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    todaytime:'',
+    todaylength:0,
     tomorrowtime: '',
     tijiaolist: [],
     huoqulist:[],
@@ -14,7 +16,14 @@ Page({
     _openid:'oAb7r4tb3B-ErO7e6gVX9Ejftgtk',
     counterId:''
   },
-
+  //获取修改的时间
+  bindDateChange:function(e){
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      todaytime: e.detail.value,
+      tomorrowtime:e.detail.value
+    })
+  },
   //添加事件数
   tianjia: function () {
     this.setData({
@@ -24,7 +33,7 @@ Page({
 
   //获取input中的值放到tijiaolist中
   huoqu: function (e) {
-    var linshi={count:-1,message:e.detail.value}
+    var linshi={count:0,message:e.detail.value}
     if(e.detail.value.length>0){
       this.data.tijiaolist.push(linshi)
       console.log(this.data.tijiaolist);
@@ -34,8 +43,38 @@ Page({
   //提交整体
   tijiao: function () {
     const db = wx.cloud.database()
-    console.log(this.data.counterId);
-    console.log(this.data._openid);
+    var list = this.data.tijiaolist
+    var cuntime = this.data.todaytime
+    if(this.data.todaylength==0){
+      cuntime = this.data.todaytime
+    }else{
+      cuntime = this.data.tomorrowtime
+    }
+    console.log(list);
+    db.collection('counters').add({
+      data: {
+        list,
+        time: cuntime
+      },
+      success: res => {
+        // 在返回结果中会包含新创建的记录的 _id
+        this.setData({
+          counterId: res._id,
+          count: 1
+        })
+        // wx.showToast({
+        //   title: '新增记录成功',
+        // })
+        console.log('[数据库] [新增记录] 成功，记录 _id: ', res)
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '新增记录失败'
+        })
+        console.error('[数据库] [新增记录] 失败：', err)
+      }
+    })
     const huoqulist = this.data.tijiaolist
     db.collection('counters').doc(this.data.counterId).update({
       data: {
@@ -60,6 +99,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var TIME = util.formatTime(new Date())
+    this.setData({
+      todaytime: TIME,
+    })
     var TIME = util.tomoTime(new Date())
     this.setData({
       tomorrowtime: TIME,
@@ -71,32 +114,28 @@ Page({
       })
     }
 
-    //页面加载创建数据库信息
+    //获取今天事件
     const db = wx.cloud.database()
-    var list = this.data.list
-    db.collection('counters').add({
-      data: {
-        list, time: TIME
-      },
+    const that = this
+    //查询当前用户所有的 counters
+    db.collection('counters').where({
+      _openid: this.data.openid,
+      time: this.data.todaytime
+    }).get({
       success: res => {
-        // 在返回结果中会包含新创建的记录的 _id
-        this.setData({
-          counterId: res._id,
-          count: 1
+        that.setData({
+          todaylength: res.data[0].list.length
         })
-        // wx.showToast({
-        //   title: '新增记录成功',
-        // })
-        console.log('[数据库] [新增记录] 成功，记录 _id: ', res)
       },
       fail: err => {
         wx.showToast({
           icon: 'none',
-          title: '新增记录失败'
+          title: '查询记录失败'
         })
-        console.error('[数据库] [新增记录] 失败：', err)
+        console.error('[数据库] [查询记录] 失败：', err)
       }
     })
+    
   },
 
   /**

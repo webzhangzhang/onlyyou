@@ -3,6 +3,7 @@ const app = getApp()
 var util = require('../../utils/util.js')
 Page({
   data: {
+    todaylength:0,
     avatarUrl: './user-unlogin.png',
     userInfo: {},
     logged: false,
@@ -15,6 +16,17 @@ Page({
     linshi:[],
     tomorrowshowlist:[],
     index:''
+  },
+  //跳转修改页面
+  todaygotoxiugai:function(){
+    wx.navigateTo({
+      url: '/pages/xiugai/xiugai?time='+this.data.todaytime
+    })
+  },
+  tomorrowgotoxiugai:function(){
+    wx.navigateTo({
+      url: '/pages/xiugai/xiugai?time=' + this.data.tomorrowtime
+    })
   },
   changecount:function(){
     this.setData({
@@ -62,10 +74,12 @@ Page({
       time: this.data.todaytime
     }).get({
       success: res => {
-        //console.log(res.data[0].list);
+        console.log(this.data.todaylength)
+        console.log(res.data[0].list.length);
         that.setData({
           todayshowlist:res.data[0].list,
-          linshi:res.data[0].list
+          linshi:res.data[0].list,
+          todaylength:res.data[0].list.length
         })
       },
       fail: err => {

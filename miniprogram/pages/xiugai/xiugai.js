@@ -6,6 +6,10 @@ Page({
    * 页面的初始数据
    */
   data: {
+    xiugaitime:'',
+    xiugailength:'',
+    pinjielist:[],
+    isshow:3,
     tomorrowtime:'',
     tomorrowshowlist:[],
     linshilist:[],//用来存储修改后的数据准备上传代替原有的数据
@@ -14,6 +18,12 @@ Page({
     newlist:[],
     openid:'oAb7r4tb3B-ErO7e6gVX9Ejftgtk',
     counterId:''
+  },
+  //添加事件数
+  tianjia: function () {
+    this.setData({
+      isshow: this.data.isshow + 1
+    })
   },
   jiequ:function(e){
     console.log(this.data.counterId);
@@ -35,14 +45,26 @@ Page({
     this.data.linshilist.splice(this.data.index,1,this.data.linshiarr)
     console.log(this.data.linshilist)
   },
+  //获取新数据
+  pinjie:function(e){
+    var linshi = { count: 0, message: e.detail.value }
+    if (e.detail.value.length > 0) {
+      this.data.pinjielist.push(linshi)
+      console.log(this.data.pinjielist);
+    }
+  },
   //上传用
   handle:function(e){
     console.log('上传')
+    console.log(this.data.linshilist instanceof Object)
+    console.log(this.data.pinjielist instanceof Object)
+    var canlist = this.data.linshilist.concat(this.data.pinjielist)
+    console.log(canlist)
     const db = wx.cloud.database()
     console.log(this.data.linshilist)
     db.collection('counters').doc(this.data.counterId).update({
       data: {
-        list: this.data.linshilist
+        list: canlist
       },
       success: res => {
         console.log(this.data.linshilist)
@@ -56,7 +78,11 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function () {
+  onLoad: function (options) {
+    //获取传递过来的时间
+    this.setData({
+      xiugaitime:options.time
+    })
     var tmtime = util.tomoTime(new Date())
     this.setData({
       tomorrowtime: tmtime
@@ -66,10 +92,11 @@ Page({
     //获取明天事件
     db.collection('counters').where({
       _openid: this.data.openid,
-      time: this.data.tomorrowtime
+      time: this.data.xiugaitime
     }).get({
       success: res => {
         that.setData({
+          xiugailength:res.data[0].list.length,
           tomorrowshowlist: res.data[0].list,
           linshilist:res.data[0].list,
           counterId:res.data[0]._id
