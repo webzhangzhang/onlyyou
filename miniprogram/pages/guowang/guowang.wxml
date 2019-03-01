@@ -1,0 +1,15 @@
+<!--过往事件-->
+<view class='card'>
+  <view wx:for='{{guowanglist}}' class='card-body'>
+    <view data-index='{{index}}' bindtap='xiabiao'>
+      {{item.time}}
+    </view>
+    <view wx:if='{{item.changshu!=1}}'>
+      <view wx:for='{{item.list}}' wx:for-item='itemlist'>
+        <view>
+          {{itemlist.message}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

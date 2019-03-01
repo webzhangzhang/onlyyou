@@ -2,7 +2,7 @@
   <view class="tomorrowno" wx:if='{{todaylength==0}}'>
     <navigator url="/pages/tomorrow/tomorrow">添加今日事件</navigator>
   </view>
-  <view class="tomorrowno"  bindtap='changecount' wx:if='{{todaylength!=0 && count==0}}'>
+  <view class="tomorrowno" bindtap='changecount' wx:if='{{todaylength!=0 && count==0}}'>
     <navigator url="/pages/tomorrow/tomorrow">添加明日事项</navigator>
   </view>
   <view class="tomorrowok" wx:if='{{todaylength!=0 && count!=0}}'>
@@ -10,24 +10,38 @@
   </view>
   <!--今日-->
   <view class='card'>
-    <view class='card-header'>
-      <view class='today' bindtap='todaygotoxiugai'>今日事项</view>
+    <view class='card-header' bindtap='todaygotoxiugai'>
+      <view class='today'>今日事项</view>
       <text class='timer'>{{todaytime}}</text>
     </view>
     <view wx:for='{{todayshowlist}}' wx:key='{{index}}'>
-      <view class="{{item.count==100?'anyclick':'anynormal'}}" data-index='{{index}}'  bindtap='clickme'>
+      <view class="{{item.count==1?'anyclick':'anynormal'}} any" data-index='{{index}}' bindtap='clickme'>
         {{item.message}}
       </view>
     </view>
   </view>
-  <!--已完成-->
+  <!--明日-->
   <view class='card'>
-    <view class='card-header'>
-    <view class='today' bindtap='tomorrowgotoxiugai'>明日事项</view>
+    <view class='card-header'  bindtap='tomorrowgotoxiugai'>
+      <view class='today'>明日事项</view>
       <text class='timer'>{{tomorrowtime}}</text>
     </view>
     <view wx:for='{{tomorrowshowlist}}' wx:key='{{index}}'>
       <view class='any'>{{item.message}}</view>
+    </view>
+  </view>
+  <!--过往-->
+  <view class='card'>
+    <view class='card-header' bindtap='gotoguowang'>
+      <view class='today'>过往事件</view>
+      <view class='right'>></view>
+    </view>
+  </view>
+  <!--未来-->
+  <view class='card'>
+    <view class='card-header' bindtap='gotoweilai'>
+      <view class='today'>未来事件</view>
+      <view class='right'>></view>
     </view>
   </view>
 </view>

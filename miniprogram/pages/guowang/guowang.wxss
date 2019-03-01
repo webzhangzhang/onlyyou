@@ -1,0 +1,3 @@
+page{background-color:#e7e7eb;}
+.card{margin-top: 20rpx;background-color:#e7e7eb;padding:20rpx;}
+.card-body{background-color: #f6f7f8;margin-top: 10rpx;border-radius: 20rpx;}

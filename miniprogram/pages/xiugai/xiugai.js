@@ -1,4 +1,5 @@
-// pages/xiugai/xiugai.js
+// // pages/xiugai/xiugai.js
+
 var util = require('../../utils/util.js')
 Page({
 
@@ -6,68 +7,61 @@ Page({
    * 页面的初始数据
    */
   data: {
-    xiugaitime:'',
-    xiugailength:'',
-    pinjielist:[],
-    isshow:3,
-    tomorrowtime:'',
-    tomorrowshowlist:[],
-    linshilist:[],//用来存储修改后的数据准备上传代替原有的数据
-    linshiarr:{count:0,message:''},
-    index:'',
-    newlist:[],
-    openid:'oAb7r4tb3B-ErO7e6gVX9Ejftgtk',
-    counterId:''
+    xiugaitime: '',//获取传递过来的时间
+    xiugailength: '',//被修改的数据的长度
+    showlist:[],//页面上显示的将要被修改的数据
+    index: '',//将要被修改的数据的下标
+    pinjielist: [],//获取新创建的事件
+    isshow: 3,
+    newindex: '',//控制添加事件按钮显示
+    openid: '',
+    counterId: ''
+  },
+  //获取将要修改数据的下标
+  jiequ: function (e) {
+    this.setData({
+      index: e.target.dataset.index
+    })
+  },
+  //获取修改后的数据
+  huoqu: function (e) {
+    //如果被修改的数据长度大于0才被存储，否则删除这条
+    if (e.detail.value.length > 0) {
+      this.data.showlist[this.data.index].message = e.detail.value
+      this.setData({
+        showlist:this.data.showlist
+      })
+    } else {
+      this.data.showlist.splice(this.data.index, 1)
+      this.setData({
+        showlist: this.data.showlist
+      })
+    }
   },
   //添加事件数
   tianjia: function () {
     this.setData({
-      isshow: this.data.isshow + 1
+      isshow: this.data.isshow + 1,
+      newindex: this.data.newindex + 1
     })
-  },
-  jiequ:function(e){
-    console.log(this.data.counterId);
-    //console.log(e.target.dataset.index)
-    //获取下标
-    this.setData({
-      index:e.target.dataset.index
-    })
-    //console.log(this.data.index)
-    //截取下标开始的一个数据
-    //console.log(this.data.tomorrowshowlist.slice(this.data.index,this.data.index+1));
-  },
-  //获取修改后的数据
-  huoqu: function (e) {
-    this.setData({
-      newlist:e.detail.value
-    })
-    this.data.linshiarr.message=e.detail.value
-    this.data.linshilist.splice(this.data.index,1,this.data.linshiarr)
-    console.log(this.data.linshilist)
   },
   //获取新数据
-  pinjie:function(e){
+  pinjie: function (e) {
     var linshi = { count: 0, message: e.detail.value }
     if (e.detail.value.length > 0) {
       this.data.pinjielist.push(linshi)
-      console.log(this.data.pinjielist);
     }
   },
-  //上传用
-  handle:function(e){
-    console.log('上传')
-    console.log(this.data.linshilist instanceof Object)
-    console.log(this.data.pinjielist instanceof Object)
-    var canlist = this.data.linshilist.concat(this.data.pinjielist)
-    console.log(canlist)
+  //上传
+  handle: function (e) {
+    var all = this.data.showlist.concat(this.data.pinjielist)
     const db = wx.cloud.database()
-    console.log(this.data.linshilist)
     db.collection('counters').doc(this.data.counterId).update({
       data: {
-        list: canlist
+        list: all
       },
       success: res => {
-        console.log(this.data.linshilist)
+        console.log('上传成功')
       }
     })
     wx.navigateTo({
@@ -81,25 +75,22 @@ Page({
   onLoad: function (options) {
     //获取传递过来的时间
     this.setData({
-      xiugaitime:options.time
+      xiugaitime: options.time
     })
-    var tmtime = util.tomoTime(new Date())
-    this.setData({
-      tomorrowtime: tmtime
-    })
+    //根据时间获取对应的数据
     const db = wx.cloud.database()
     const that = this
-    //获取明天事件
     db.collection('counters').where({
       _openid: this.data.openid,
       time: this.data.xiugaitime
     }).get({
       success: res => {
         that.setData({
+          showlist:res.data[0].list,
+          counterId:res.data[0]._id,
           xiugailength:res.data[0].list.length,
-          tomorrowshowlist: res.data[0].list,
-          linshilist:res.data[0].list,
-          counterId:res.data[0]._id
+          newindex: res.data[0].list.length
+
         })
       },
       fail: err => {

@@ -11,9 +11,10 @@ Page({
     todaylength:0,
     tomorrowtime: '',
     tijiaolist: [],
+    resdatalength:'',
     huoqulist:[],
     isshow: 3,
-    _openid:'oAb7r4tb3B-ErO7e6gVX9Ejftgtk',
+    _openid:'',
     counterId:''
   },
   //获取修改的时间
@@ -36,7 +37,6 @@ Page({
     var linshi={count:0,message:e.detail.value}
     if(e.detail.value.length>0){
       this.data.tijiaolist.push(linshi)
-      console.log(this.data.tijiaolist);
     }
   },
 
@@ -50,46 +50,45 @@ Page({
     }else{
       cuntime = this.data.tomorrowtime
     }
-    console.log(list);
-    db.collection('counters').add({
-      data: {
-        list,
-        time: cuntime
-      },
-      success: res => {
-        // 在返回结果中会包含新创建的记录的 _id
-        this.setData({
-          counterId: res._id,
-          count: 1
-        })
-        // wx.showToast({
-        //   title: '新增记录成功',
-        // })
-        console.log('[数据库] [新增记录] 成功，记录 _id: ', res)
-      },
-      fail: err => {
-        wx.showToast({
+
+    //判断数据库中是否有今天的记录，没有则创建，有则修改
+    if (this.data.tijiaolist.length>0){
+      console.log('因为此时数据库中数据记录为0，所以创建记录并添加记录');
+      db.collection('counters').add({
+        data: {
+          list,
+          time: cuntime,
+          changshu:1
+        },
+        success: res => {
+          console.log('创建一条新纪录', this.data.resdatalength)
+          this.setData({
+            counterId: res._id,
+            count: 1
+          })
+          wx.showToast({
+            title: '添加成功',
+          })
+        }
+      })
+      //创建成功后修改这条数据
+      const huoqulist = this.data.tijiaolist
+      db.collection('counters').doc(this.data.counterId).update({
+        data: {
+          list: huoqulist
+        },
+        success: res => {
+          console.log('数据已经被修改',this.data.resdatalength)
+          this.setData({
+            count: newCount
+          })
+        },
+        fail: err => {
           icon: 'none',
-          title: '新增记录失败'
-        })
-        console.error('[数据库] [新增记录] 失败：', err)
-      }
-    })
-    const huoqulist = this.data.tijiaolist
-    db.collection('counters').doc(this.data.counterId).update({
-      data: {
-        list: huoqulist
-      },
-      success: res => {
-        this.setData({
-          count: newCount
-        })
-      },
-      fail: err => {
-        icon: 'none',
-          console.error('[数据库] [更新记录] 失败：', err)
-      }
-    })
+            console.error('[数据库] [更新记录] 失败：', err)
+        }
+      })
+    }
     wx.navigateTo({
       url: '/pages/index/index',
     })
@@ -107,6 +106,11 @@ Page({
     this.setData({
       tomorrowtime: TIME,
     })
+    if (this.data.tomorrowtime == "2019-02-29") {
+      this.setData({
+        tomorrowtime: '2019-03-01'
+      })
+    }
     //获取openid
     if (app.globalData.openid) {
       this.setData({
@@ -114,7 +118,7 @@ Page({
       })
     }
 
-    //获取今天事件
+    //获取今天事件的长度
     const db = wx.cloud.database()
     const that = this
     //查询当前用户所有的 counters
@@ -123,7 +127,10 @@ Page({
       time: this.data.todaytime
     }).get({
       success: res => {
+        console.log('此时数据库中有数据',res.data.length);
         that.setData({
+          //今天事件的长度
+          resdatalength: res.data.length,
           todaylength: res.data[0].list.length
         })
       },

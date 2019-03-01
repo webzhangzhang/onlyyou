@@ -26,10 +26,8 @@
       <input placeholder='|事件6' bindblur='huoqu' wx:if='{{isshow>5}}'></input>
       <input placeholder='|事件7' bindblur='huoqu' wx:if='{{isshow>6}}'></input>
       <input placeholder='|事件8' bindblur='huoqu' wx:if='{{isshow>7}}'></input>
-      <input placeholder='|事件9' bindblur='huoqu' wx:if='{{isshow>8}}'></input>
-      <rich-text nodes="{{nodes}}"></rich-text>
     </view>
-    <button class='addthing' bindtap='tianjia'>添加计划</button>
+    <button class='addthing' bindtap='tianjia' wx:if='{{isshow<8}}'>添加计划</button>
   </view>
   <button class='imsure' bindtap='tijiao'>确定</button>
 </view>

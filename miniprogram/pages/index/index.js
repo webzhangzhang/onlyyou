@@ -4,6 +4,7 @@ var util = require('../../utils/util.js')
 Page({
   data: {
     todaylength:0,
+    tomorrowlength:0,
     avatarUrl: './user-unlogin.png',
     userInfo: {},
     logged: false,
@@ -13,20 +14,34 @@ Page({
     tomorrowtime:'',
     count:0,
     todayshowlist:[],
-    linshi:[],
     tomorrowshowlist:[],
-    index:''
+    counterId:''
+  },
+  //过往事件的显示与隐藏
+  gotoguowang:function(){
+    wx.navigateTo({
+      url: '/pages/guowang/guowang',
+    })
+  },
+  gotoweilai: function () {
+    wx.navigateTo({
+      url: '/pages/weilai/weilai',
+    })
   },
   //跳转修改页面
   todaygotoxiugai:function(){
-    wx.navigateTo({
-      url: '/pages/xiugai/xiugai?time='+this.data.todaytime
-    })
+    if(this.data.todaylength>0){
+      wx.navigateTo({
+        url: '/pages/xiugai/xiugai?time=' + this.data.todaytime
+      })
+    }
   },
   tomorrowgotoxiugai:function(){
-    wx.navigateTo({
-      url: '/pages/xiugai/xiugai?time=' + this.data.tomorrowtime
-    })
+    if(this.data.tomorrowlength>0){
+      wx.navigateTo({
+        url: '/pages/xiugai/xiugai?time=' + this.data.tomorrowtime
+      })
+    }
   },
   changecount:function(){
     this.setData({
@@ -35,24 +50,28 @@ Page({
   },
   //点击划掉事件
   clickme:function(e){
-    //获取下标
-    //console.log(e.target.dataset.index)
-    this.setData({
-      index: e.target.dataset.index
-    })
-    //给linshilist赋值
-    //修改设定好的字段
-    if (this.data.todayshowlist[this.data.index].count==0){
-      this.data.linshi[this.data.index].count=100
+    //获取下标,根据下标修改数据
+    //修改todayshowlist中的count
+    if (this.data.todayshowlist[e.target.dataset.index].count==0){
+      this.data.todayshowlist[e.target.dataset.index].count =1
       this.setData({
-        todayshowlist:this.data.linshi
+        todayshowlist:this.data.todayshowlist
       })
     }else{
-      this.data.linshi[this.data.index].count = 0
+      this.data.todayshowlist[e.target.dataset.index].count = 0
       this.setData({
-        todayshowlist: this.data.linshi
+        todayshowlist: this.data.todayshowlist
       })
     }
+    const db = wx.cloud.database()
+    db.collection('counters').doc(this.data.counterId).update({
+      data: {
+        list: this.data.todayshowlist
+      },
+      success: res => {
+        console.log('上传成功')
+      }
+    })
 
   },
 
@@ -62,6 +81,9 @@ Page({
       todaytime: TIME,
     })
     var tmtime = util.tomoTime(new Date())
+    if(tmtime=="2019-02-29"){
+      tmtime="2019-03-01"
+    }
     this.setData({
       tomorrowtime:tmtime
     })
@@ -74,12 +96,10 @@ Page({
       time: this.data.todaytime
     }).get({
       success: res => {
-        console.log(this.data.todaylength)
-        console.log(res.data[0].list.length);
         that.setData({
           todayshowlist:res.data[0].list,
-          linshi:res.data[0].list,
-          todaylength:res.data[0].list.length
+          todaylength:res.data[0].list.length,
+          counterId:res.data[0]._id
         })
       },
       fail: err => {
@@ -96,11 +116,11 @@ Page({
       time: this.data.tomorrowtime
     }).get({
       success: res => {
-        that.setData({
-          tomorrowshowlist: res.data[0].list,
-          count:res.data[0].list.length
-        })
-        console.log(this.data.tomorrowshowlist)
+          that.setData({
+            tomorrowshowlist: res.data[0].list,
+            tomorrowlength: res.data.length,
+            count: res.data[0].list.length
+          })
       },
       fail: err => {
         wx.showToast({

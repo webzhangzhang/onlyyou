@@ -14,8 +14,8 @@ background-color:#237ed8;
 color:#fff;
 border-radius:10rpx}
 .imsure{background-color:#237ed8;
-position:relative;
-top:700rpx;
+position:fixed;
+top:1000rpx;width:98%;
 
 text-align:center;
 color:#fff;

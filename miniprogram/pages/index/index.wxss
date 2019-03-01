@@ -30,5 +30,7 @@ border-bottom:1rpx dashed #ccc;
 }
 .today{width:200rpx;text-align: center;}
 .timer{margin-left: 250rpx;}
+.any{padding:10rpx;}
 .anynormal{padding:10rpx;text-decoration:none;}
-.anyclick{padding:10rpx;text-decoration:line-through;}
+.anyclick{text-decoration:line-through;}
+.right{margin-left: 420rpx;color:#ddd;}

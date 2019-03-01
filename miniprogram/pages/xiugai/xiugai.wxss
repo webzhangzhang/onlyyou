@@ -8,12 +8,14 @@ line-height:100rpx;
 border-bottom:1rpx dashed #ccc;
 }
 .today{width:200rpx;text-align: center;}
-.timer{margin-left: 250rpx;}
+.timer{margin-left: 155rpx;}
 .addthing{margin-top:20rpx;
 background-color:#237ed8;
 color:#fff;
 border-radius:10rpx}
 .imsure{background-color:#237ed8;
-text-align:center;margin-top:500rpx;
+position:fixed;
+top:1000rpx;width:98%;
+text-align:center;
 color:#fff;
 border-radius:10rpx;}

@@ -2,20 +2,17 @@
   <view class='card'>
     <view class='card-header'>
       <view class='today'>修改计划</view>
-      <text class='timer'>{{xiugaitime}}</text>
+      <text class='timer'>选择 {{xiugaitime}}</text>
     </view>
-    <view class='anything' wx:for='{{tomorrowshowlist}}'>
+    <view class='anything' wx:for='{{showlist}}'>
       <input value='{{item.message}}' name='jihua' data-index='{{index}}' bindblur='huoqu' bindfocus='jiequ'></input>
     </view>
     <view>
       <input placeholder='|事件{{xiugailength+1}}' bindblur='pinjie' wx:if='{{isshow>3}}'></input>
       <input placeholder='|事件{{xiugailength+2}}' bindblur='pinjie' wx:if='{{isshow>4}}'></input>
       <input placeholder='|事件{{xiugailength+3}}' bindblur='pinjie' wx:if='{{isshow>5}}'></input>
-      <input placeholder='|事件{{xiugailength+4}}' bindblur='pinjie' wx:if='{{isshow>6}}'></input>
-      <input placeholder='|事件{{xiugailength+5}}' bindblur='pinjie' wx:if='{{isshow>7}}'></input>
-      <input placeholder='|事件{{xiugailength+6}}' bindblur='pinjie' wx:if='{{isshow>8}}'></input>
     </view>
-    <button class='addthing' bindtap='tianjia'>添加计划</button>
+    <button class='addthing' bindtap='tianjia' wx:if='{{newindex<=7}}'>添加计划</button>
   </view>
   <button class='imsure' bindtap='handle'>确定</button>
 </view>
